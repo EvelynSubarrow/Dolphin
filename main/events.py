@@ -6,7 +6,7 @@ class EventTree:
 
     def _guarantee_tree(self, tree_name):
         if tree_name not in self._trees:
-            self._trees[tree_name] = EventTree(tree_name, self)
+            self._trees[tree_name] = EventTree(tree_name, self._root)
         return self._trees[tree_name]
 
     def single(self, event_name):
