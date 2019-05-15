@@ -31,5 +31,13 @@ class EventTree:
         for module_instance, function_reference in self._hooks:
             function_reference(module_instance, event)
 
+    def __getattr__(self, name):
+        if name in self.__dict__ or name.startswith("_"):
+            return super().__getattr__(name)
+        elif name in self._trees:
+            return self._trees[name]
+        else:
+            raise AttributeError("'%s' object has no attribute named '%s'")
+
 class Event:
     pass
