@@ -1,12 +1,12 @@
 class EventTree:
     def __init__(self, name, root=None):
-        self._root = root or self
+        self._root = root
         self._trees = {}
         self._hooks = set()
 
     def _guarantee_tree(self, tree_name):
         if tree_name not in self._trees:
-            self._trees[tree_name] = EventTree(tree_name, self._root)
+            self._trees[tree_name] = EventTree(tree_name, self)
         return self._trees[tree_name]
 
     def single(self, event_name):
@@ -31,13 +31,11 @@ class EventTree:
         for module_instance, function_reference in self._hooks:
             function_reference(module_instance, event)
 
-    def __getattr__(self, name):
-        if name in self.__dict__ or name.startswith("_"):
-            return super().__getattr__(name)
-        elif name in self._trees:
-            return self._trees[name]
-        else:
-            raise AttributeError("'%s' object has no attribute named '%s'")
+    def __call__(self, *args, **kwargs):
+        for module_instance, function_reference in self._hooks:
+            function_reference(module_instance, *args, **kwargs)
+        if self._root:
+            self._root(*args,**kwargs)
 
 class Event:
     pass
