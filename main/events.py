@@ -1,8 +1,13 @@
+import multiprocessing, queue
+
 class EventTree:
     def __init__(self, name, root=None):
         self._root = root
         self._trees = {}
         self._hooks = set()
+        if not root:
+            self.internal_queue = multiprocessing.Queue()
+            self.external_queue = queue.Queue()
 
     def _guarantee_tree(self, tree_name):
         if tree_name not in self._trees:
@@ -26,3 +31,18 @@ class EventTree:
             function_reference(module_instance, *args, **kwargs)
         if self._root:
             self._root(*args,**kwargs)
+
+    def invoke_queued_events(self):
+        while True:
+            try:
+                event = self.internal_queue.get(False)
+            except queue.Empty as e:
+                break
+            self.single(event["path"])(**event["args"])
+
+        while True:
+            try:
+                event = self.external_queue.get(False)
+            except queue.Empty as e:
+                break
+            self.single(event["path"])(**event["args"])
