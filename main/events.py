@@ -18,24 +18,11 @@ class EventTree:
     def __getitem__(self, event_name):
         return self.single(event_name)
 
-    def hook(self, module_instance, function_reference, invocation_mode=0, completion_event=None):
-        self._hooks.add((module_instance, function_reference))
-
-    def invoke(self, event_name, event, force_invocation_mode=0):
-        current_tree = self
-        for part in event_name.split("/"):
-            current_tree = current_tree._guarantee_tree(part)
-            current_tree._invoke(event, force_invocation_mode)
-
-    def _invoke(self, event, force_invocation_mode=0):
-        for module_instance, function_reference in self._hooks:
-            function_reference(module_instance, event)
+    def hook(self, module_instance, function_reference, priority=1000):
+        self._hooks.add((module_instance, function_reference, priority))
 
     def __call__(self, *args, **kwargs):
-        for module_instance, function_reference in self._hooks:
+        for module_instance, function_reference, priority in sorted(self._hooks, key=lambda m,f,p: p):
             function_reference(module_instance, *args, **kwargs)
         if self._root:
             self._root(*args,**kwargs)
-
-class Event:
-    pass
