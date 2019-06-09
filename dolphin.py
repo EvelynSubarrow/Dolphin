@@ -21,7 +21,9 @@ class Main:
         loader.exec_module(module)
 
         module.instance = module.ModuleLoader(self)
+        module.id = 0
 
+        self.modules.modules["module_loader"] = module
         self.modules = module.instance
 
 if __name__=="__main__":
