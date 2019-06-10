@@ -6,6 +6,15 @@ class Module(Module):
     def __init__(self, main):
         self.modules = {}
         self.current_index = 0
+        self.main = main
+
+    def enable_module(self, name):
+        self.modules[name].enabled = True
+        self.modules[name].instance.on_enable(self.main)
+
+    def disable_module(self, name):
+        self.modules[name].enabled = False
+        self.modules[name].instance.on_disable(self.main)
 
     def load_module(self, name):
         self.current_index += 1
@@ -20,6 +29,9 @@ class Module(Module):
 
         module.instance = module.Module(self)
         module.id = self.current_index
-        module.enabled = True
+        module.enabled = False
 
         self.modules[short_name] = module
+
+        module.instance.on_load(self.main)
+        self.enable_module(short_name)
