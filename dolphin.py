@@ -15,13 +15,13 @@ class Main:
         self.events["start"]()
 
     def load_module_loader(self):
-        module_spec = importlib.util.spec_from_file_location("module/module_loader:0000", "module/ModuleLoader.py")
+        module_spec = importlib.util.spec_from_file_location("module/module_loader:0000", "module/module_loader.py")
         module = importlib.util.module_from_spec(module_spec)
 
         loader = typing.cast(importlib.abc.Loader, module_spec.loader)
         loader.exec_module(module)
 
-        module.instance = module.ModuleLoader(self)
+        module.instance = module.Module(self)
         module.id = 0
         module.enabled = True
 
