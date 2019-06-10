@@ -22,9 +22,11 @@ class Main:
 
         module.instance = module.ModuleLoader(self)
         module.id = 0
+        module.enabled = True
 
-        self.modules.modules["module_loader"] = module
         self.modules = module.instance
+        self.modules.modules["module_loader"] = module
+
 
 if __name__=="__main__":
     main = Main().main()
