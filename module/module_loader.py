@@ -35,3 +35,8 @@ class Module(Module):
 
         module.instance.on_load(self.main)
         self.enable_module(short_name)
+
+    def unload_module(self, name):
+        self.disable_module(name)
+        self.modules[name].instance.on_unload(self.main)
+        del self.modules[name]
