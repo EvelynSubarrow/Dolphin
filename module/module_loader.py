@@ -2,7 +2,7 @@ import importlib.util, importlib.abc, typing, sys
 
 from main.module import Module
 
-class ModuleLoader(Module):
+class Module(Module):
     def __init__(self, main):
         self.modules = {}
         self.current_index = 0
@@ -19,5 +19,7 @@ class ModuleLoader(Module):
         loader.exec_module(module)
 
         module.instance = module.Module(self)
+        module.id = self.current_index
+        module.enabled = True
 
         self.modules[short_name] = module
