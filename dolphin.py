@@ -11,6 +11,7 @@ class Main:
 
     def main(self):
         self.load_module_loader()
+        self.modules.load_module("config")
         self.events["start"]()
 
     def load_module_loader(self):
