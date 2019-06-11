@@ -8,6 +8,9 @@ class Module(Module):
         self.current_index = 0
         self.main = main
 
+    def on_enable(self, main):
+        main.modules = self
+
     def enable_module(self, name):
         self.modules[name].enabled = True
         self.modules[name].instance.on_enable(self.main)

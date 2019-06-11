@@ -25,8 +25,10 @@ class Main:
         module.id = 0
         module.enabled = True
 
-        self.modules = module.instance
-        self.modules.modules["module_loader"] = module
+        module.instance.on_load(self)
+        module.instance.on_enable(self)
+
+        module.instance.modules["module_loader"] = module
 
 
 if __name__=="__main__":
