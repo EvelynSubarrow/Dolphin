@@ -9,6 +9,7 @@ class Main:
     def __init__(self):
         self.events = events.EventTree("/")
         self.modules = None
+        self.config = None
 
     def main(self):
         self.load_module_loader()
