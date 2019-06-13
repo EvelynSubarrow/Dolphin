@@ -8,6 +8,9 @@ class Module(Module):
         self.current_index = 0
         self.main = main
 
+    def __getitem__(self, name):
+        return self.modules[name].instance
+
     def on_enable(self, main):
         main.modules = self
 
