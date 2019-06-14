@@ -1,4 +1,8 @@
 class Module:
+    # Constructor
+    def __init__(self, main):
+        pass
+
     # This is called when a module is enabled after loading
     def on_enable(self, main):
         pass
