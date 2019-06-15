@@ -23,7 +23,7 @@ class EventTree:
     def __getitem__(self, event_name):
         return self.single(event_name)
 
-    def hook(self, module_instance, function_reference, priority=1000):
+    def hook(self, module_instance, function_reference, priority=0):
         self._hooks.add((module_instance, function_reference, priority))
 
     def __call__(self, *args, **kwargs):
