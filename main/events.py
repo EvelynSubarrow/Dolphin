@@ -27,10 +27,12 @@ class EventTree:
         self._hooks.add((module_instance, function_reference, priority))
 
     def __call__(self, *args, **kwargs):
+        responses = []
         for module_instance, function_reference, priority in sorted(self._hooks, key=lambda m,f,p: p):
-            function_reference(module_instance, *args, **kwargs)
+            responses.append(function_reference(module_instance, *args, **kwargs))
         if self._root:
-            self._root(*args,**kwargs)
+            responses.extend(self._root(*args,**kwargs))
+        return responses
 
     def invoke_queued_events(self):
         while True:
