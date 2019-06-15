@@ -33,7 +33,7 @@ class Module(Module):
         loader = typing.cast(importlib.abc.Loader, module_spec.loader)
         loader.exec_module(module)
 
-        module.instance = module.Module(self)
+        module.instance = module.Module(self.main)
         module.id = self.current_index
         module.enabled = False
 
