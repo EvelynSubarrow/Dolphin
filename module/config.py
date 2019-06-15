@@ -1,6 +1,3 @@
-import os
-from collections import OrderedDict
-
 from main.module import Module
 
 class Module(Module):
