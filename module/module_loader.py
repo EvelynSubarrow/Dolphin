@@ -17,16 +17,21 @@ class Module(Module):
     def enable_module(self, name):
         self.modules[name].enabled = True
         self.modules[name].instance.on_enable(self.main)
+        self.main.events["module_loader/module/enable/{}".format(name)](name=name)
 
     def disable_module(self, name):
         self.modules[name].enabled = False
         self.modules[name].instance.on_disable(self.main)
+        self.main.events["module_loader/module/disable/{}".format(name)](name=name)
 
     def load_module(self, name):
         self.current_index += 1
         self._load_module(name, "module/{}:{:04X}".format(name, self.current_index), "module/{}.py".format(name))
 
     def _load_module(self, short_name, name, path):
+        if any(self.main.events["module_loader/module/preload/{}".format(name)](name=name)):
+            return
+
         module_spec = importlib.util.spec_from_file_location(name, path)
         module = importlib.util.module_from_spec(module_spec)
 
@@ -41,8 +46,11 @@ class Module(Module):
 
         module.instance.on_load(self.main)
         self.enable_module(short_name)
+        self.main.events["module_loader/module/load/{}".format(name)](name=name)
+
 
     def unload_module(self, name):
         self.disable_module(name)
         self.modules[name].instance.on_unload(self.main)
         del self.modules[name]
+        self.main.events["module_loader/module/unload/{}".format(name)](name=name)
