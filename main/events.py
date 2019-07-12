@@ -23,15 +23,16 @@ class EventTree:
     def __getitem__(self, event_name):
         return self.single(event_name)
 
-    def hook(self, module_instance, function_reference, priority=0):
-        self._hooks.add((module_instance, function_reference, priority))
+    def hook(self, function_reference, priority=0):
+        self._hooks.add((function_reference, priority))
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, **kwargs):
         responses = []
-        for module_instance, function_reference, priority in sorted(self._hooks, key=lambda m,f,p: p):
-            responses.append(function_reference(module_instance, *args, **kwargs))
+        for function_reference, priority in sorted(self._hooks, key=lambda x: x[1]):
+            responses.append(function_reference(Event(**kwargs)))
+
         if self._root:
-            responses.extend(self._root(*args,**kwargs))
+            responses.extend(self._root(**kwargs))
         return responses
 
     def invoke_queued_events(self):
@@ -48,3 +49,8 @@ class EventTree:
             except queue.Empty as e:
                 break
             self.single(event["path"])(**event["args"])
+
+class Event:
+    def __init__(self, **kwargs):
+        for k,v in kwargs.items():
+            self.__setattr__(k, v)

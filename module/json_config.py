@@ -9,8 +9,8 @@ class Module(Module):
         self._config = collections.OrderedDict()
 
     def on_enable(self, main):
-        main.events["config/collect"].hook(self, self.collect)
-        main.events["config/keys"].hook(self, self.keys)
+        main.events["config/collect"].hook(self.collect)
+        main.events["config/keys"].hook(self.keys)
 
     def on_load(self, main):
         self._config = self.reload()
@@ -38,9 +38,18 @@ class Module(Module):
             else:
                 target_map[k] = v
 
-    def collect(self, key):
-        return self._config.get(key)
+    def resolve(self, key):
+        if not key: return None
+        target = self._config
+        for part in key.split("/"):
+            target = target.get(part)
+            print(part)
+            print(target)
+        return target
 
-    def keys(self, key):
-        return self._config.get(key).keys()
+    def collect(self, event):
+        return self.resolve(event.key)
+
+    def keys(self, event):
+        return self.resolve(event.key).keys()
 

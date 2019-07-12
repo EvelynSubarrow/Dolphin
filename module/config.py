@@ -9,7 +9,7 @@ class Module(Module):
 
     # Individual items, default response hooks should be registered north of 0
     def __getitem__(self, key):
-        responses = self.main.events["config/collect/{}".format(key)](key)
+        responses = self.main.events["config/collect/{}".format(key)](key=key)
         if len(responses):
             return responses[0]
         else:
@@ -19,4 +19,4 @@ class Module(Module):
     # requested
     # TODO: condense all keys across all responses
     def get_keys(self, key):
-        return self.main.events["config/keys/{}".format(key)](key)[0]
+        return self.main.events["config/keys/{}".format(key)](key=key)[0]
