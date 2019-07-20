@@ -14,7 +14,12 @@ class Main:
     def main(self):
         self.load_module_loader()
         self.modules.load_module("config")
+        self.modules.load_module("json_config")
+
         self.events["start"]()
+        while not any(self.events["tick"]()):
+            self.events.invoke_queued_events()
+        self.events["end"]()
 
     def load_module_loader(self):
         initial_loader = module_loader.Module(self)
