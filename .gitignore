@@ -1,0 +1,6 @@
+*.pyc
+*.sh
+*.log
+
+module/_*
+config/_*
