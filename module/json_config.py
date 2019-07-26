@@ -43,8 +43,6 @@ class Module(Module):
         target = self._config
         for part in key.split("/"):
             target = target.get(part)
-            print(part)
-            print(target)
         return target
 
     def collect(self, event):
