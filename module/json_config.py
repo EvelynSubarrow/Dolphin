@@ -1,5 +1,4 @@
-import json, collections
-from pathlib import Path
+import json, collections, os
 
 from main.module import Module
 
@@ -17,13 +16,12 @@ class Module(Module):
 
     def reload(self):
         out = collections.OrderedDict()
-
-        for filename in Path("config").glob("**/*.json"):
-            config_root_path = str(filename.relative_to(Path("config"))).replace(".json", "")
-
-            with open(str(filename)) as f:
-                self.fold(out, json.load(f), config_root_path.split("/"))
-
+        for root, dirs, files in os.walk("config"):
+            for filename in files:
+                if not filename.startswith(".") and filename.endswith(".json"):
+                    config_path = root.split("/")[1:] + [filename.rstrip(".json")]
+                    with open(root + "/" + filename) as f:
+                        self.fold(out, json.load(f), config_path)
         return out
 
     def fold(self, target_map, source_map, path):
