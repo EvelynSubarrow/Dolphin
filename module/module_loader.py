@@ -13,7 +13,6 @@ class Module(Module):
 
     def on_enable(self, main):
         main.modules = self
-        main.events["start"].hook(self.initial_load)
 
     def enable_module(self, name):
         self.modules[name].enabled = True
@@ -25,7 +24,7 @@ class Module(Module):
         self.modules[name].instance.on_disable(self.main)
         self.main.events["module_loader/module/disable/{}".format(name)](name=name)
 
-    def initial_load(self, event):
+    def initial_load(self):
         for module_name in self.main.config.get_keys("module/module_loader/modules"):
             self.load_module(module_name)
 

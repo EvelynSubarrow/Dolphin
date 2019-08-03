@@ -15,6 +15,7 @@ class Main:
         self.load_module_loader()
         self.modules.load_module("config")
         self.modules.load_module("json_config")
+        self.modules.initial_load()
 
         self.events["start"]()
         while not any(self.events["tick"]()):
