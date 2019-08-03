@@ -41,6 +41,8 @@ class Module(Module):
         target = self._config
         for part in key.split("/"):
             target = target.get(part)
+            if target==None:
+                return target
         return target
 
     def collect(self, event):
