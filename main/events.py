@@ -29,7 +29,10 @@ class EventTree:
     def __call__(self, **kwargs):
         responses = []
         for function_reference, priority in sorted(self._hooks, key=lambda x: x[1]):
-            responses.append(function_reference(Event(**kwargs)))
+            try:
+                responses.append(function_reference(Event(**kwargs)))
+            except EmptyResponseError as e:
+                pass
 
         if self._root:
             responses.extend(self._root(**kwargs))
@@ -54,3 +57,6 @@ class Event:
     def __init__(self, **kwargs):
         for k,v in kwargs.items():
             self.__setattr__(k, v)
+
+class EmptyResponseError(Exception):
+    pass
