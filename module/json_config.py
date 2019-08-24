@@ -21,7 +21,7 @@ class Module(Module):
             dirs.sort()
             for filename in sorted(files):
                 if not filename.startswith(".") and filename.endswith(".json"):
-                    config_path = root.split("/")[1:] + [filename.rstrip(".json")]
+                    config_path = root.split("/")[1:] + [filename.rstrip(".json").lstrip("_")]
                     config_path = [a.split(".", 1)[-1] for a in config_path]
                     with open(root + "/" + filename) as f:
                         self.fold(out, json.load(f), config_path)
