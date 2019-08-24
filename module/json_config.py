@@ -18,7 +18,8 @@ class Module(Module):
     def reload(self):
         out = collections.OrderedDict()
         for root, dirs, files in os.walk("config"):
-            for filename in files:
+            dirs.sort()
+            for filename in sorted(files):
                 if not filename.startswith(".") and filename.endswith(".json"):
                     config_path = root.split("/")[1:] + [filename.rstrip(".json")]
                     with open(root + "/" + filename) as f:
