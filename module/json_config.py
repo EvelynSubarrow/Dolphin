@@ -1,6 +1,7 @@
 import json, collections, os
 
 from main.module import Module
+from main.events import EmptyResponseError
 
 class Module(Module):
     def __init__(self, main):
@@ -42,7 +43,7 @@ class Module(Module):
         for part in key.split("/"):
             target = target.get(part)
             if target==None:
-                return target
+                raise EmptyResponseError()
         return target
 
     def collect(self, event):
