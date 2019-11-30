@@ -60,3 +60,10 @@ class Event:
 
 class EmptyResponseError(Exception):
     pass
+
+def event_hook(path, priority=0):
+    def event_hook_base(fun):
+        fun._hook = (path,priority)
+        return fun
+
+    return event_hook_base

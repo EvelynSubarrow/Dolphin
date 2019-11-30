@@ -1,4 +1,4 @@
-import importlib.util, importlib.abc, typing, sys
+import importlib.util, importlib.abc, typing, sys, inspect
 
 from main.module import Module
 
@@ -17,6 +17,14 @@ class Module(Module):
     def enable_module(self, name):
         self.modules[name].enabled = True
         self.modules[name].instance.on_enable(self.main)
+
+        for member_name in dir(self.modules[name].instance):
+            member = getattr(self.modules[name].instance, member_name)
+            if getattr(member, "__call__", None):
+                attribute = getattr(member, "_hook", None)
+                if attribute:
+                    self.main.events[attribute[0]].hook(member, attribute[1])
+
         self.main.events["module_loader/module/enable/{}".format(name)](name=name)
 
     def disable_module(self, name):
