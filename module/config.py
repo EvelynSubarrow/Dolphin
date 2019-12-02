@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 from main.module import Module
 
 class Module(Module):
@@ -17,6 +19,5 @@ class Module(Module):
 
     # This is for the likes of irc/server/*, defaults shouldn't be provided or
     # requested
-    # TODO: condense all keys across all responses
     def get_keys(self, key):
-        return self.main.events["config/keys/{}".format(key)](key=key)[0]
+        return OrderedDict.fromkeys(sum(self.main.events["config/keys/{}".format(key)](key=key),[])).keys()

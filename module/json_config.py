@@ -52,5 +52,5 @@ class Module(Module):
         return self.resolve(event.key)
 
     def keys(self, event):
-        return self.resolve(event.key).keys()
+        return list(self.resolve(event.key).keys())
 
