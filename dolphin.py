@@ -17,9 +17,13 @@ class Main:
         self.modules.load_module("json_config")
         self.modules.initial_load()
 
+        n = 0
+
         self.events["start"]()
-        while not any(self.events["tick"]()):
+        while not any(self.events["tick/{}".format(n)](count=n)):
             self.events.invoke_queued_events()
+            n += 1
+
         self.events["end"]()
 
     def load_module_loader(self):
