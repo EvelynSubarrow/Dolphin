@@ -16,5 +16,3 @@ class Module(Module):
         time.sleep(max(0, .25-(ut_now-self.last_ut)))
 
         self.last_ut = ut_now
-
-        print("tick")
