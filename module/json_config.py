@@ -1,16 +1,12 @@
 import json, collections, os
 
 from main.module import Module
-from main.events import EmptyResponseError
+from main.events import EmptyResponseError, event_hook
 
 class Module(Module):
     def __init__(self, main):
         self.main = main
         self._config = collections.OrderedDict()
-
-    def on_enable(self, main):
-        main.events["config/collect"].hook(self.collect)
-        main.events["config/keys"].hook(self.keys)
 
     def on_load(self, main):
         self._config = self.reload()
@@ -48,9 +44,11 @@ class Module(Module):
                 raise EmptyResponseError()
         return target
 
+    @event_hook("config/collect")
     def collect(self, event):
         return self.resolve(event.key)
 
+    @event_hook("config/keys")
     def keys(self, event):
         return list(self.resolve(event.key).keys())
 
