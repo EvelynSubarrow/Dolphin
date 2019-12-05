@@ -12,10 +12,15 @@ class Module(Module):
     # Individual items, default response hooks should be registered north of 0
     def __getitem__(self, key):
         responses = self.main.events["config/collect/{}".format(key)](key=key)
+        # TODO: more helpful (and specific) error
+        return responses[0]
+
+    def get(self, key, default=None):
+        responses = self.main.events["config/collect/{}".format(key)](key=key)
         if len(responses):
             return responses[0]
         else:
-            return None
+            return default
 
     # This is for the likes of irc/server/*, defaults shouldn't be provided or
     # requested
